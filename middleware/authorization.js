@@ -3,6 +3,7 @@ import { redirect } from "express/lib/response";
 import { getAuth, updateProfile } from "firebase/auth";
 
 export function authorization(req, res, next) {
+   
     const auth = getAuth();
     if (!auth.currentUser) {
         res.redirect('/login');

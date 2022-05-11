@@ -38,19 +38,19 @@ export const getData = async (connection, nameTable, numSec) => {
 // me devuelve el numSec y el estado (informado) de la db
 export const getInformado = async (connection) => {
 
-    const query = "select NumSecuenciaP, Informado from parametros where Informado = 'N' ";
+    const query = "  SELECT NumSecuenciaP , Informado FROM parametros ORDER BY NumSecuenciaP DESC LIMIT 1";
 
     const [results,] = await connection.execute(query);
 
-    if (results.length > 0) {
+    // if (results.length > 0) {
 
-        const {NumSecuenciaP, Informado} = results[0];
-        return {
-            numSecuencia: NumSecuenciaP,
-            informado: Informado
-        }
-    }
-    return []
+    //     const {NumSecuenciaP, Informado} = results[0];
+    //     return {
+    //         numSecuencia: NumSecuenciaP,
+    //         informado: Informado
+    //     }
+    // }
+    return results;
 }
 
 // me devuelve un mensaje de acuerdo a lo que se recibio desde la base de datos
@@ -119,14 +119,17 @@ export const getRecordData = async (connection) => {
     const query = 'select NumSecuenciaP, FechaSecuenciaP, Informado from parametros group by NumSecuenciaP';
     const [record,] = await connection.execute(query);
     
-    return record.map(sec => ({
-        ...sec,
-        Informado: (sec.Informado == 'N') ? 'NO' : 'SI',
-        FechaSecuenciaP: moment(sec.FechaSecuenciaP).format("L")
-    })).sort(function(a, b) {
-        return b.NumSecuenciaP - a.NumSecuenciaP ;
-      });
+    if(record.length > 0) {
+        return record.map(sec => ({
+            ...sec,
+            Informado: (sec.Informado == 'N') ? 'NO' : 'SI',
+            FechaSecuenciaP: moment(sec.FechaSecuenciaP).format("L")
+        })).sort(function(a, b) {
+            return b.NumSecuenciaP - a.NumSecuenciaP ;
+          });
+    }
 
+    return [];
     
     
 }

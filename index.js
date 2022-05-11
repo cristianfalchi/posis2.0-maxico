@@ -11,8 +11,16 @@ import { authorization } from './middleware/authorization'
 // creamos un servidor express
 const app = express();
 
-// variable que almacena el username del usuario
+// variables globales
 let displayName = '';
+let message = '';
+let connection = null;
+let parametros = null;
+async function initialConnection() {
+    connection = await connectionDB();
+    parametros = await getInformado(connection); // [{...}] o []
+}
+
 
 // Middlewares
 app.use(cors());
@@ -38,78 +46,64 @@ app.listen(app.get('port'), () => {
 // Rutas
 app.get('/', authorization, async (req, res) => {
 
-    let message = '';
-    // obtengo una conexion a bd
-    const connection = await connectionDB();
-    const parametros = await getInformado(connection);
-
-    (parametros.length > 0 && parametros.informado === 'N')
-        ? message = `La SECUENCIA N°: ${parametros.numSecuencia} está pendiente de enviar.`
+    await initialConnection();
+    (parametros.length > 0 && parametros[0].Informado === 'N')
+        ? message = `La SECUENCIA N°: ${parametros[0]?.NumSecuenciaP} está pendiente de enviar.`
         : message = "No hay SECUENCIA pendiente de enviar.";
 
-    res.render('index', { informado: parametros.informado, message, msgType: 'info', displayName });
+    res.render('index', { informado: parametros[0]?.Informado, message, msgType: 'info', displayName });
 
 });
 
 app.get('/clientes', authorization, async (req, res) => {
 
-    // obtengo una conexion a bd
-    const connection = await connectionDB();
-    const parametros = await getInformado(connection);
-
-    if (parametros.informado === 'N') {
+    await initialConnection();
+    if (parametros.length > 0 && parametros[0].Informado === 'N') {
         const customers = await getData(connection, 'customer');
-        return res.render('customers', { customers, informado: parametros.informado, displayName });
+        return res.render('customers', { customers, informado: parametros[0]?.Informado, displayName });
     }
 
-    return res.render('customers', { customers: [], informado: parametros.informado, displayName });
+    return res.render('customers', { customers: [], informado: parametros[0]?.Informado, displayName });
 
 });
 
 app.get('/ventas', authorization, async (req, res) => {
 
-    // obtengo una conexion a bd
-    const connection = await connectionDB();
-    const parametros = await getInformado(connection);
-
-    if (parametros.informado === 'N') {
+    await initialConnection();
+    if (parametros.length > 0 && parametros[0].Informado === 'N') {
         const sales = await getData(connection, 'sales');
-        return res.render('sales', { sales, informado: parametros.informado, displayName });
+        return res.render('sales', { sales, informado: parametros[0]?.Informado, displayName });
     }
 
-    return res.render('sales', { sales: [], informado: parametros.informado, displayName });
+    return res.render('sales', { sales: [], informado: parametros[0]?.Informado, displayName });
 
 });
 
 app.get('/stock', authorization, async (req, res) => {
-
-    // obtengo una conexion a bd
-    const connection = await connectionDB();
-    const parametros = await getInformado(connection);
-
-    if (parametros.informado === 'N') {
+    await initialConnection();
+    if (parametros.length > 0 && parametros[0].Informado === 'N') {
         const stock = await getData(connection, 'stock');
-        return res.render('stock', { stock, informado: parametros.informado, displayName });
+        return res.render('stock', { stock, informado: parametros[0]?.Informado, displayName });
     }
 
-    return res.render('stock', { stock: [], informado: parametros.informado, displayName });
+    return res.render('stock', { stock: [], informado: parametros[0]?.Informado, displayName });
 
 });
 
 app.get('/send', async (req, res) => {
-
-    const connection = await connectionDB();
-    let parametros = await getInformado(connection);
-
+    await initialConnection();
+    // Unknown column 'undefined' in 'where clause'
     try {
+
+        if (parametros.length <= 0) {
+            return res.redirect('/');
+        }
+
         const customer = await getData(connection, 'customer');
         const sales = await getData(connection, 'sales');
         const stock = await getData(connection, 'stock');
 
         // en caso que el usuario quiera enviar sin datos
-        if (parametros.informado === 'S') {
-            return res.redirect('/');
-        }
 
         // especificacion de la API
         const data = { customer, sales, stock };
@@ -134,32 +128,31 @@ app.get('/send', async (req, res) => {
         const resJson = await response.json();
 
         // obetengo el mensaje y el tipo de mensaje de la API
-        const message = getStatusMessage(resJson);
+        message = getStatusMessage(resJson);
 
         if (message.msgType === 'success') {
-            await connection.execute(`update customer set informado = 'S' where Secuencia = ${parametros.numSecuencia}`)
-            await connection.execute(`update sales set informado = 'S' where sequenceNumber = ${parametros.numSecuencia}`)
-            await connection.execute(`update stock set informado = 'S' where sequenceNumber = ${parametros.numSecuencia}`)
-            await connection.execute(`update parametros set informado = 'S' where NumSecuenciaP = ${parametros.numSecuencia}`)
+            await connection.execute(`update customer set informado = 'S' where Secuencia = ${parametros[0]?.NumSecuenciaP}`)
+            await connection.execute(`update sales set informado = 'S' where sequenceNumber = ${parametros[0]?.NumSecuenciaP}`)
+            await connection.execute(`update stock set informado = 'S' where sequenceNumber = ${parametros[0]?.NumSecuenciaP}`)
+            await connection.execute(`update parametros set informado = 'S' where NumSecuenciaP = ${parametros[0]?.NumSecuenciaP}`)
 
-            parametros = await getInformado(connection);
-            return res.render('index', { informado: parametros.informado, ...message });
+            const parametros2 = await getInformado(connection);
+            return res.render('index', { informado: parametros2[0]?.Informado, ...message, displayName });
         }
 
-        res.render('index', { informado: parametros.informado, ...message });
+        res.render('index', { informado: parametros[0]?.Informado, ...message, displayName });
 
     } catch (error) {
-        console.log(error);
-        res.render('index', { informado: parametros.informado, message: error.message, msgType: 'danger' });
+
+        res.render('index', { informado: parametros[0]?.Informado, message: error.message, msgType: 'danger', displayName });
     }
 
 })
 
 app.get('/historial', authorization, async (req, res) => {
-
-    const connection = await connectionDB();
+    await initialConnection();
     const record = await getRecordData(connection)
-    res.render('historial', { record, displayName });
+    res.render('historial', { record, informado: parametros[0]?.Informado, displayName });
 })
 
 // realiza la autenticacion del usuario
@@ -182,7 +175,7 @@ app.post(
                     res.redirect('/');
                 })
                 .catch((error) => {
-                    const message = 'El usuario o contraseña no es valido!'
+                    message = 'El usuario o contraseña no es valido!'
                     res.render('login', { message, correo, contraseña });
                 })
         }
