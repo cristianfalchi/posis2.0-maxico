@@ -2,11 +2,11 @@
   "name": "posis-2.0",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "build": "babel app.js -d dist",
-    "start": "node app.js",
-    "dev": "nodemon --exec babel-node app.js"
+    "build": "babel index.js -d dist",
+    "start": "node index.js",
+    "dev": "nodemon --exec babel-node index.js"
   },
   "keywords": [],
   "author": "",
