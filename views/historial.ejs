@@ -10,26 +10,24 @@
         
         <div class="container__info stock animate__animated animate__fadeIn animate__faster">
             <div class = "title">
-                <h2>>Historial</h2>
+                <h2>Historial</h2>
             <hr/>
             </div>
             <div class="div-table">
                 <table >
                     <thead>
                         <tr >
-                          <th>sequenceNumber</th>
-                          <th>date</th>
-                          <th>customers</th>
-                          <th>informed</th>
+                          <th>Numero Secuencia</th>
+                          <th>Fecha</th>
+                          <th>Informado</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% for( let i = 0; i < sequences.length; i++ ) { %>
+                        <% for( let i = 0; i < record.length; i++ ) { %>
                         <tr>
-                            <td><%= sequences[i].sequenceNumber %> </td>
-                            <td><%= sequences[i].date %></td>
-                            <td><%= sequences[i].customers %></td>
-                            <td><%= sequences[i].informed %></td>
+                            <td><%= record[i].NumSecuenciaP %> </td>
+                            <td><%= record[i].FechaSecuenciaP %></td>
+                            <td class=<%= (record[i].Informado === 'NO') && 'no-informado'  %> ><%= record[i].Informado %></td>
                         </tr>
                         <% } %>
                     </tbody>

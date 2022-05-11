@@ -273,3 +273,8 @@ a {
     text-decoration: none;
     cursor: default;
 }
+
+.no-informado {
+    background-color: rgb(241, 163, 163);
+   
+}

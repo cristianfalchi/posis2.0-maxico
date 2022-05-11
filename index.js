@@ -4,7 +4,7 @@ const { body, validationResult } = require('express-validator');
 const cors = require('cors')
 import './firebase/config-firebase'
 import { connectionDB } from './database/conectionDB';
-import { getStatusMessage, getInformado, getData } from './database/utils';
+import { getStatusMessage, getInformado, getData, getRecordData } from './database/utils';
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { authorization } from './middleware/authorization'
 
@@ -92,7 +92,7 @@ app.get('/stock', authorization, async (req, res) => {
         return res.render('stock', { stock, informado: parametros.informado, displayName });
     }
 
-    return res.render('stock', { stock: [], informado: parametros.informado,displayName });
+    return res.render('stock', { stock: [], informado: parametros.informado, displayName });
 
 });
 
@@ -110,6 +110,8 @@ app.get('/send', async (req, res) => {
         if (parametros.informado === 'S') {
             return res.redirect('/');
         }
+
+        // especificacion de la API
         const data = { customer, sales, stock };
 
         // realizo el request a la API method POST
@@ -135,7 +137,7 @@ app.get('/send', async (req, res) => {
         const message = getStatusMessage(resJson);
 
         if (message.msgType === 'success') {
-            await connection.execute("update customer set informado = 'S'")
+            await connection.execute(`update customer set informado = 'S' where Secuencia = ${parametros.numSecuencia}`)
             await connection.execute(`update sales set informado = 'S' where sequenceNumber = ${parametros.numSecuencia}`)
             await connection.execute(`update stock set informado = 'S' where sequenceNumber = ${parametros.numSecuencia}`)
             await connection.execute(`update parametros set informado = 'S' where NumSecuenciaP = ${parametros.numSecuencia}`)
@@ -155,10 +157,9 @@ app.get('/send', async (req, res) => {
 
 app.get('/historial', authorization, async (req, res) => {
 
-    // const connection = await connectionDB();
-    // const parametros = await getInformado(connection);
-    // res.render('index', { informado: parametros.informado });
-  res.redirect('/');
+    const connection = await connectionDB();
+    const record = await getRecordData(connection)
+    res.render('historial', { record, displayName });
 })
 
 // realiza la autenticacion del usuario
@@ -187,7 +188,7 @@ app.post(
         }
     })
 
-    // muestra el formulario de login
+// muestra el formulario de login
 app.get('/login', (req, res) => {
     // console.log(req.originalUrl);
     // compruebo que no este logueado

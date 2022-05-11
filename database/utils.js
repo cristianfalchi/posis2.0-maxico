@@ -1,8 +1,9 @@
 
-import {concatVisitFrecuency} from '../helpers/concatVisitFrecuency';
+import { concatVisitFrecuency } from '../helpers/concatVisitFrecuency';
+import moment from 'moment';
 
 
-// Me devuelve la data formateada recuperada de la DB
+// Me devuelve la data de clientes, ventas, stock formateada recuperada de la DB
 export const getData = async (connection, nameTable, numSec) => {
 
     const sqlQuery = `select * from ${nameTable} where informado = 'N' limit 20 `;
@@ -27,23 +28,24 @@ export const getData = async (connection, nameTable, numSec) => {
                 delete stk.Informado
                 return stk
             })
-  
+
         default:
             break;
     }
- 
+
 }
 
 // me devuelve el numSec y el estado (informado) de la db
 export const getInformado = async (connection) => {
 
-    const query = "select * from parametros";
+    const query = "select NumSecuenciaP, Informado from parametros where Informado = 'N' ";
 
     const [results,] = await connection.execute(query);
 
+    const {NumSecuenciaP, Informado} = results[0];
     return {
-        numSecuencia: results[0].NumSecuenciaP,
-        informado: results[0].Informado
+        numSecuencia: NumSecuenciaP,
+        informado: Informado
     }
 }
 
@@ -98,15 +100,32 @@ export const getStatusMessage = (resJson) => {
             break;
     }
 
-    if(resJson.statusCode >= 400){
+    if (resJson.statusCode >= 400) {
         msgType = "danger"
-    }else{
+    } else {
         msgType = "success"
     }
 
-    return {message, msgType}
+    return { message, msgType }
 }
 
+// retorna un arreglo con los objetos que encuentra en la db
+export const getRecordData = async (connection) => {
+
+    const query = 'select NumSecuenciaP, FechaSecuenciaP, Informado from parametros group by NumSecuenciaP';
+    const [record,] = await connection.execute(query);
+    
+    return record.map(sec => ({
+        ...sec,
+        Informado: (sec.Informado == 'N') ? 'NO' : 'SI',
+        FechaSecuenciaP: moment(sec.FechaSecuenciaP).format("L")
+    })).sort(function(a, b) {
+        return b.NumSecuenciaP - a.NumSecuenciaP ;
+      });
+
+    
+    
+}
 
 
 
