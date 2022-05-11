@@ -1,224 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="style.css">
-    
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <title>Maxico Srl - Posis 2.0</title>
-</head>
+<%- include('partials/head', {title: "Maxico Srl - Posis 2.0"}) %>
+
 <body>
     <div class="container">
-        <aside class="navbar__main animate__animated animate__fadeIn animate__faster">
-            <div class="navbar__div-logo">
-              <img class="navbar__img-logo" src="logo_maxico.png" alt="logo_maxico" />
-            </div>
-      
-            <div class="navbar__menu" >
-                <div class="navbar__menu-main">
-                    <li id="clientes" onclick="handleViewData(this)" class=" icons-menu">
-                        <i class="fa-solid fa-people-group"></i> <span>Clientes</span> 
-                    </li>
-                    <li id="ventas" onclick="handleViewData(this)" class=" icons-menu">
-                        <i class="fa-solid fa-sack-dollar"></i> <span>Ventas</span> 
-                    </li>
-                    <li id="stock" onclick="handleViewData(this)" class=" icons-menu">
-                        <i class="fa-solid fa-boxes-stacked"></i> <span>Stock</span> 
-                    </li>
-                    <!-- <li id="informe" onclick="handleViewData(this)" class=" icons-menu">
-                        <i class="fa-solid fa-boxes-stacked"></i> <span>Stock</span> 
-                    </li> -->
-                </div>
-              
-                <li 
-                    id="btnSendData" 
-                    class=" icons-menu__send-data <%= (data.customer.length === 0 && data.sales.length === 0 && data.stock.length === 0) ? 'disabled' : '' %> ">
-                    <a 
-                    href="/send"
-                    onclick="handleSendData()"
-                    >
-                        <i class="fa-solid fa-cloud-arrow-up"></i> <span>Enviar datos</span> 
-                    </a>
-                </li>
-            </div>
-        </aside>
+        <!-- menu de navegacion -->
+        <%- include('partials/navbar') %>
 
-        <div class="uploading">
-            <img class="img-uploading" src="uploading.gif" alt="">
+        <!-- animacion de uploading -->
+        <%- include('partials/uploading', {imgUploading: 'uploading.gif'}) %>
+        
+        <!-- mensajes de informacion -->
+        <div class="message info color-info <%= (locals.msgType !== 'info') &&  'hidden'  %> ">
+            <div>
+                <i class="fa-solid <fa-circle-exclamation"></i>
+                <p><%= locals.message %></p>
+            </div>
+            <i id="info" onclick="handleCloseMessage(this)" class="fa-solid fa-x"></i>
         </div>
-
-            <div class="message color-info <%= (msgType !== 'info') &&  'hidden'  %>  animate__animated animate__fadeIn animate__faster">
-                <div>
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <p><%= message %></p>
-                </div>
-                <i id="color-info" onclick="handleCloseMessage(this)" class="fa-solid fa-x"></i>
+        <div class="message success color-success <%= (locals.msgType !== 'success') &&  'hidden'  %> ">
+            <div>
+                <i class="fa-solid fa-circle-check "></i>
+                <p><%= locals.message %></p>
             </div>
-            <div class= "message color-success <%= (msgType !== 'success') && 'hidden'  %>  animate__animated animate__fadeIn animate__faster">
-                <div>
-                    <i  class="fa-solid fa-circle-check"></i>
-                    <p><%= message  %></p>
-                </div>
-                <i id="color-success" onclick="handleCloseMessage(this)" class="fa-solid fa-x"></i>
+            <i id="success" onclick="handleCloseMessage(this)" class="fa-solid fa-x"></i>
+        </div>
+        <div class="message danger color-danger <%= (locals.msgType !== 'danger') &&  'hidden'  %> ">
+            <div>
+                <i class="fa-solid fa-circle-xmark"></i>
+                <p><%= locals.message %></p>
             </div>
-            <div class="message color-danger <%= (msgType !== 'danger') && 'hidden'  %>  animate__animated animate__fadeIn animate__faster">
-                <div>
-                    <i  class="fa-solid fa-circle-xmark"></i>
-                    <p><%= message  %></p>
-                </div>
-                <i id="color-danger" onclick="handleCloseMessage(this)" class="fa-solid fa-x"></i>
-            </div>                   
-
-            <div class="container__info clientes hidden animate__animated animate__fadeIn animate__faster">
-                <div class = "title">
-                    <h2>Clientes</h2>
-                    <hr/>
-                </div>
-                <div class="div-table">
-                    <table >
-                        <thead>
-                            <tr >
-                              <th>POSCode</th>
-                              <th>movementCode</th>
-                              <th>legalName</th>
-                              <th>street</th>
-                              <th>storeNumber</th>
-                              <th>city</th>
-                              <th>district</th>
-                              <th>state</th>
-                              <th>zipCode</th>
-                              <th>visitFrequency</th>
-                              <th>XCoordinate</th>
-                              <th>YCoordinate</th> 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for( let i = 0; i < data.customer.length; i++ ) { %>
-                            <tr>
-                                <td><%= data.customer[i].POSCode %> </td>
-                                <td><%= data.customer[i].movementCode %></td>
-                                <td><%= data.customer[i].legalName %></td>
-                                <td><%= data.customer[i].street %></td>
-                                <td><%= data.customer[i].storeNumber %></td>
-                                <td><%= data.customer[i].city %></td>
-                                <td><%= data.customer[i].district %></td>
-                                <td><%= data.customer[i].state %></td>
-                                <td><%= data.customer[i].zipCode %></td>
-                                <td><%= data.customer[i].visitFrequency %></td>
-                                <td><%= data.customer[i].XCoordinate %></td>
-                                <td><%= data.customer[i].YCoordinate %></td>
-                            </tr>
-                            <% } %>
-                        </tbody>
-                      </table>
-                </div>
-            </div>
-            <div class="container__info ventas hidden animate__animated animate__fadeIn animate__faster">
-                <div class = "title">
-                    <h2>Ventas</h2>
-                <hr/>
-                </div>
-                <div class="div-table">
-                    <table >
-                        <thead>
-                            <tr >
-                              <th>POSCode</th>
-                              <th>sequenceNumber</th>
-                              <th>documentNumber</th>
-                              <th>documentDate</th>
-                              <th>branchCode</th>
-                              <th>product</th>
-                              <th>salesType</th>
-                              <th>quantityOfPacks</th>
-                              <th>totalPacksAmount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for( let i = 0; i < data.sales.length; i++ ) { %>
-                            <tr>
-                                <td><%= data.sales[i].POSCode %></td>
-                                <td><%= data.sales[i].sequenceNumber%> </td>
-                                <td><%= data.sales[i].documentNumber %></td>
-                                <td><%= data.sales[i].documentDate %></td>
-                                <td><%= data.sales[i].branchCode %></td>
-                                <td><%= data.sales[i].product %></td>
-                                <td><%= data.sales[i].salesType %></td>
-                                <td><%= data.sales[i].quantityOfPacks %></td>
-                                <td><%= data.sales[i].totalPacksAmount %></td>
-                            </tr>
-                            <% } %>
-                        </tbody>
-                      </table>
-                </div>
-            </div>
-            <div class="container__info stock hidden animate__animated animate__fadeIn animate__faster">
-                <div class = "title">
-                    <h2>Stock</h2>
-                <hr/>
-                </div>
-                <div class="div-table">
-                    <table >
-                        <thead>
-                            <tr >
-                              <th>sequenceNumber</th>
-                              <th>branchCode</th>
-                              <th>stockDate</th>
-                              <th>product</th>
-                              <th>shipToCode</th>
-                              <th>quantityOfPacks</th>
-                            
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for( let i = 0; i < data.stock.length; i++ ) { %>
-                            <tr>
-                                <td><%= data.stock[i].sequenceNumber %> </td>
-                                <td><%= data.stock[i].branchCode %></td>
-                                <td><%= data.stock[i].stockDate %></td>
-                                <td><%= data.stock[i].product %></td>
-                                <td><%= data.stock[i].shipToCode %></td>
-                                <td><%= data.stock[i].quantityOfPacks %></td>
-                           
-                            </tr>
-                            <% } %>
-                        </tbody>
-                      </table>
-                </div>
-            </div>
+            <i id="danger" onclick="handleCloseMessage(this)" class="fa-solid fa-x"></i>
+        </div>
+        
+           
     </div>
 
     <script type="text/javascript" >
-
-    let infoVisibility = '';
-  
-    function handleViewData(divBtn) {
-
-        // cierro todo mensaje visible
-        document.querySelectorAll('.message').forEach(msg => {
-            msg.classList.add('hidden');
-        })
-        // obtengo la data cliente, ventas o stock
-        const data = document.querySelector(`.${divBtn.id}`);
-
-        if(infoVisibility === ''){
-            infoVisibility = divBtn.id;
-            data.classList.remove('hidden');
-            divBtn.children[1].classList.add('active');
-        }else{
-            if(data.classList.contains('hidden')){
-                document.querySelector(`.${infoVisibility}`).classList.add('hidden'); // la data que estaba visualizada
-                document.getElementById(`${infoVisibility}`).children[1].classList.remove('active');
-                divBtn.children[1].classList.add('active');
-                data.classList.remove('hidden'); // la data que se visualizara ahora
-                infoVisibility = divBtn.id;
-            }
-        }
-    }
 
     function handleCloseMessage (closeIcon){
         document.querySelector(`.${closeIcon.id}`).classList.add('hidden');

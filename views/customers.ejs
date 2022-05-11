@@ -1,0 +1,66 @@
+<%- include('partials/head', {title: "Maxico Srl - Posis 2.0"}) %>
+
+<body>
+    <div class="container">
+        <!-- menu de navegacion -->
+        <%- include('partials/navbar') %>
+
+        <!-- animacion de uploading -->
+        <%- include('partials/uploading', {imgUploading: 'uploading.gif'}) %>
+        
+        <div class="container__info clientes animate__animated animate__fadeIn animate__faster">
+            <div class = "title">
+                <h2>Clientes</h2>
+                <hr/>
+            </div>
+            <div class="div-table">
+                <table >
+                    <thead>
+                        <tr >
+                          <th>POSCode</th>
+                          <th>movementCode</th>
+                          <th>legalName</th>
+                          <th>street</th>
+                          <th>storeNumber</th>
+                          <th>city</th>
+                          <th>district</th>
+                          <th>state</th>
+                          <th>zipCode</th>
+                          <th>visitFrequency</th>
+                          <th>XCoordinate</th>
+                          <th>YCoordinate</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for( let i = 0; i < customers.length; i++ ) { %>
+                        <tr>
+                            <td><%= customers[i].POSCode %> </td>
+                            <td><%= customers[i].movementCode %></td>
+                            <td><%= customers[i].legalName %></td>
+                            <td><%= customers[i].street %></td>
+                            <td><%= customers[i].storeNumber %></td>
+                            <td><%= customers[i].city %></td>
+                            <td><%= customers[i].district %></td>
+                            <td><%= customers[i].state %></td>
+                            <td><%= customers[i].zipCode %></td>
+                            <td><%= customers[i].visitFrequency %></td>
+                            <td><%= customers[i].XCoordinate %></td>
+                            <td><%= customers[i].YCoordinate %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" >
+
+        function handleSendData() {
+            document.querySelector('.uploading').style.display = "block";
+        }
+    
+        </script>
+
+</body>
+</html>

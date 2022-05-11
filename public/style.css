@@ -32,41 +32,24 @@
     width: 100%;
     height: 100%;
     background-color: #0d3531;
-    
+
 }
 
 .navbar__menu-main {
     margin-top: 20px;
     width: 100%;
-    
+
+}
+
+.navbar__menu-logout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-end;
+    padding-bottom: 45px;
 }
 
 .icons-menu {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    width: 70%;
-    margin-bottom: 10px;
-    line-height: 2em;
-    cursor: pointer;
-    background-color: #0d3531;
-    color: white;
-}
-
-.icons-menu span:hover {
-    text-decoration: underline;
-}
-
-.icons-menu i {
-    text-align: center;
-    width: 35px;
-    padding: 5px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-
-.icons-menu__send-data {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -77,24 +60,49 @@
     cursor: pointer;
     background-color: #0d3531;
     color: #fff;
-    margin-bottom: 30px;
     padding-left: 5px;
     font-size: 15px;
- 
 }
 
-.icons-menu__send-data a {
-    text-decoration: none;
-    color: #fff;
+hr {
+    width: 85%;
+    background-color: white;
+    margin: 20px 0px 10px 0px;
+    align-self: center;
 }
 
-.icons-menu__send-data i {
+.icons-menu-logout {
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.icons-menu-logout i {
     text-align: center;
-    width: 35px;
+    width: 20px;
     padding: 5px;
     margin-left: 10px;
     margin-right: 10px;
-    
+
+}
+
+span:hover {
+    text-decoration: underline;
+}
+
+
+.icons-menu i {
+    text-align: center;
+    width: 20px;
+    padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+a {
+    text-decoration: none;
+    color: #fff;
 }
 
 .active {
@@ -102,8 +110,8 @@
 }
 
 .disabled {
-    pointer-events:none;
-    opacity:0.5;
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 
@@ -121,7 +129,7 @@
 
 
 .container__info {
-    
+
     width: 100%;
     height: 93vh;
 
@@ -176,27 +184,27 @@
     padding: 20px 0 5px 15px;
     top: 0px;
     background: white;
-    
+
 }
 
 .message {
-    display:flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     width: 80%;
     height: 60px;
-    position:absolute;
+    position: absolute;
     top: 20px;
     left: 230px;
     border-radius: 7px;
     padding-left: 15px;
     padding-right: 15px;
-    
+
 }
 
 .color-info {
-background-color: #c5dfe9;
-color: #054458;
+    background-color: #c5dfe9;
+    color: #054458;
 }
 
 .color-success {
@@ -223,6 +231,7 @@ color: #054458;
     font-size: 30px;
     cursor: default;
 }
+
 .message i {
     cursor: pointer;
 }
@@ -250,4 +259,17 @@ color: #054458;
     margin: auto;
     width: 200px;
     border-radius: 20px;
+}
+
+.display-name {
+    font-family: courier;
+    letter-spacing: 0px;
+    color: #fff;
+    margin-left: 10px;
+    padding-top: 10px;
+}
+
+.display-name:hover {
+    text-decoration: none;
+    cursor: default;
 }

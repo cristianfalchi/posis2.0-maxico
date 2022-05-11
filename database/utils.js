@@ -1,6 +1,54 @@
-// resJson es la respuesta de la API
 
-const getStatusMessage = (resJson) => {
+import {concatVisitFrecuency} from '../helpers/concatVisitFrecuency';
+
+
+// Me devuelve la data formateada recuperada de la DB
+export const getData = async (connection, nameTable, numSec) => {
+
+    const sqlQuery = `select * from ${nameTable} where informado = 'N' limit 20 `;
+    const [resData,] = await connection.execute(sqlQuery);
+
+    switch (nameTable) {
+        case 'customer':
+            return (resData.length > 0) ? concatVisitFrecuency(resData) : resData;
+        case 'sales':
+            return resData.filter(sale => {
+                delete sale.Informado
+                return sale
+            }).map(sale => (
+                {
+                    ...sale,
+                    totalPacksAmount: Number(sale.totalPacksAmount),
+                    documentNumber: Number(sale.documentNumber)
+                }))
+
+        case 'stock':
+            return resData.filter(stk => {
+                delete stk.Informado
+                return stk
+            })
+  
+        default:
+            break;
+    }
+ 
+}
+
+// me devuelve el numSec y el estado (informado) de la db
+export const getInformado = async (connection) => {
+
+    const query = "select * from parametros";
+
+    const [results,] = await connection.execute(query);
+
+    return {
+        numSecuencia: results[0].NumSecuenciaP,
+        informado: results[0].Informado
+    }
+}
+
+// me devuelve un mensaje de acuerdo a lo que se recibio desde la base de datos
+export const getStatusMessage = (resJson) => {
     let message = '';
     let msgType = '';
 
@@ -59,4 +107,6 @@ const getStatusMessage = (resJson) => {
     return {message, msgType}
 }
 
-module.exports = getStatusMessage;
+
+
+

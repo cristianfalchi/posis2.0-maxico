@@ -1,0 +1,52 @@
+<aside class="navbar__main ">
+            <div class="navbar__div-logo">
+               <a href="/" title="Home">
+                   <img class="navbar__img-logo" src="logo_maxico.png" alt="logo_maxico" />
+               </a> 
+            </div>
+      
+            <div class="navbar__menu" >
+                <div class="navbar__menu-main">
+                    <li id="clientes" class=" <%= (locals.customers) && 'active' %>  icons-menu">
+                        <a href="/clientes">
+                            <i class="fa-solid fa-people-group"></i><span>Clientes</span> 
+                        </a>
+                    </li>
+                    <li id="ventas" class=" <%= (locals.sales) && 'active' %> icons-menu">
+                        <a href="/ventas">
+                            <i class="fa-solid fa-sack-dollar"></i><span>Ventas</span> 
+                        </a>
+                    </li>
+                    <li id="stock"  class=" <%= (locals.stock) && 'active' %> icons-menu">
+                        <a href="/stock">
+                            <i class="fa-solid fa-boxes-stacked"></i><span>Stock</span> 
+                        </a>
+                    </li>
+                    <li id="historial" class=" <%= (locals.history) && 'active' %> icons-menu">
+                        <a href="/historial">
+                            <i class="fa-solid fa-clipboard-list"></i><span>Historial</span> 
+                        </a>
+                    </li>
+                </div>
+              <div class="navbar__menu-logout">
+                  <li 
+                      id="btnSendData" 
+                      class=" icons-menu-logout  <%= (locals.informado === 'S') ? 'disabled' : '' %> ">
+                      <a 
+                      href="/send"
+                      onclick="handleSendData()"
+                      >
+                          <i class="fa-solid fa-cloud-arrow-up"></i> <span>Enviar datos</span> 
+                      </a>
+                  </li>
+                  <hr/>
+                  <li id="logout" class=" icons-menu-logout">
+                      <a href="/logout">
+                          <i class="fa-solid fa-right-from-bracket"></i>
+                          <span>Salir</span> 
+                      </a>
+                      <em class="display-name">(<%= locals.displayName %>)</em>  
+                  </li>
+              </div>
+            </div>
+        </aside>

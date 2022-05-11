@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css"/>
+    <title>Maxico Posis 2.0 / Login</title>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeIn animate__faster">
+        <div class="login-container">
+          <div class="register">
+            <h2>Bienvenid@</h2>
+
+            <form action="/login" method="post">
+              <input name="correo" type="text" placeholder="Correo" class="correo" value="<%= locals.correo %>">
+              <input name="contraseña" type="password" placeholder="Contraseña" class="pass" value="<%= locals.contraseña %>">
+              <input type="submit" class="submit" value="INGRESAR">
+              <% for( let i = 0; i < locals.errors?.errors.length; i++ ) { %>
+              <p class="errors"><b><%= errors.errors[i].param+': '%></b><%= errors.errors[i].msg+'.' %></p>
+              <% } %>
+              <p class="errors"><b><%= locals.message %></p>
+            </form>
+          </div>
+         </div>
+      </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-const concatVisitFrecuency = (clients) => {
+export const concatVisitFrecuency = (clients) => {
 
     clients.forEach(client => {
         client.visitFrequency = client.visitFrequency1 + client.visitFrequency2 + client.visitFrequency3 + client.visitFrequency4 + client.visitFrequency5 + client.visitFrequency6 + client.visitFrequency7;
@@ -15,6 +15,7 @@ const concatVisitFrecuency = (clients) => {
         delete client.visitFrequency7;
 
         delete client.Informado;
+        delete client.Secuencia;
 
     })
 
@@ -23,4 +24,3 @@ const concatVisitFrecuency = (clients) => {
 
 }
 
-module.exports = concatVisitFrecuency;

@@ -1,0 +1,56 @@
+<%- include('partials/head', {title: "Maxico Srl - Posis 2.0"}) %>
+
+<body>
+    <div class="container">
+        <!-- menu de navegacion -->
+        <%- include('partials/navbar') %>
+
+        <!-- animacion de uploading -->
+        <%- include('partials/uploading', {imgUploading: 'uploading.gif'}) %>
+        
+        <div class="container__info stock animate__animated animate__fadeIn animate__faster">
+            <div class = "title">
+                <h2>Stock</h2>
+            <hr/>
+            </div>
+            <div class="div-table">
+                <table >
+                    <thead>
+                        <tr >
+                          <th>sequenceNumber</th>
+                          <th>branchCode</th>
+                          <th>stockDate</th>
+                          <th>product</th>
+                          <th>shipToCode</th>
+                          <th>quantityOfPacks</th>
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for( let i = 0; i < stock.length; i++ ) { %>
+                        <tr>
+                            <td><%= stock[i].sequenceNumber %> </td>
+                            <td><%= stock[i].branchCode %></td>
+                            <td><%= stock[i].stockDate %></td>
+                            <td><%= stock[i].product %></td>
+                            <td><%= stock[i].shipToCode %></td>
+                            <td><%= stock[i].quantityOfPacks %></td>
+                       
+                        </tr>
+                        <% } %>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" >
+
+        function handleSendData() {
+            document.querySelector('.uploading').style.display = "block";
+        }
+    
+        </script>
+
+</body>
+</html>
