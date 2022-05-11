@@ -43,7 +43,7 @@ app.get('/', authorization, async (req, res) => {
     const connection = await connectionDB();
     const parametros = await getInformado(connection);
 
-    (parametros.informado === 'N')
+    (parametros.length > 0 && parametros.informado === 'N')
         ? message = `La SECUENCIA N°: ${parametros.numSecuencia} está pendiente de enviar.`
         : message = "No hay SECUENCIA pendiente de enviar.";
 

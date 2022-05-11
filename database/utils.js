@@ -42,11 +42,15 @@ export const getInformado = async (connection) => {
 
     const [results,] = await connection.execute(query);
 
-    const {NumSecuenciaP, Informado} = results[0];
-    return {
-        numSecuencia: NumSecuenciaP,
-        informado: Informado
+    if (results.length > 0) {
+
+        const {NumSecuenciaP, Informado} = results[0];
+        return {
+            numSecuencia: NumSecuenciaP,
+            informado: Informado
+        }
     }
+    return []
 }
 
 // me devuelve un mensaje de acuerdo a lo que se recibio desde la base de datos
