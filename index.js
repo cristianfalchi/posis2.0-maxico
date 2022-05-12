@@ -198,6 +198,34 @@ app.get('/logout', (req, res) => {
 
 })
 
+
+app.get('/reset', authorization, async (req, res) => {
+    await initialConnection();
+
+    try {
+
+        await connection.execute("UPDATE customer SET Informado = 'N' WHERE Secuencia = 3272");
+        await connection.execute("UPDATE sales SET informado = 'N' WHERE sequenceNumber = 3272");
+        await connection.execute("UPDATE stock SET informado = 'N' WHERE sequenceNumber = 3272");
+        await connection.execute("UPDATE parametros SET Informado = 'N' WHERE NumSecuenciaP = 3272");
+
+        message = getStatusMessage({statusCode: 200});
+
+        const parametros2 = await getInformado(connection);
+        return res.render('index', { informado: parametros2[0]?.Informado, ...message, displayName });
+
+    } catch (error) {
+        return res.render('index', { informado: parametros[0]?.Informado, message: error.message, msgType: 'danger', displayName });
+    }
+
+    // UPDATE customer SET Informado = 'N' WHERE Secuencia = 3272
+    // UPDATE sales SET informado = 'N' WHERE sequenceNumber = 3272
+    // UPDATE stock SET informado = 'N' WHERE sequenceNumber = 3272
+    // UPDATE parametros SET Informado = 'N' WHERE NumSecuenciaP = 3272
+
+})
+
+
 // para rutas no coincidentes
 app.get('*', (req, res) => {
     const auth = getAuth();
