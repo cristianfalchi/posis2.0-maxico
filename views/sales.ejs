@@ -10,41 +10,54 @@
         
         <div class="container__info ventas animate__animated animate__fadeIn animate__faster">
             <div class = "title">
-                <h2>Ventas</h2>
-            <hr/>
+               <h1>Ventas</h1>
+               <hr/>
             </div>
-            <div class="div-table">
-                <table >
-                    <thead>
-                        <tr >
-                          <th>POSCode</th>
-                          <th>sequenceNumber</th>
-                          <th>documentNumber</th>
-                          <th>documentDate</th>
-                          <th>branchCode</th>
-                          <th>product</th>
-                          <th>salesType</th>
-                          <th>quantityOfPacks</th>
-                          <th>totalPacksAmount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% for( let i = 0; i < sales.length; i++ ) { %>
-                        <tr>
-                            <td><%= sales[i].POSCode %></td>
-                            <td><%= sales[i].sequenceNumber%> </td>
-                            <td><%= sales[i].documentNumber %></td>
-                            <td><%= sales[i].documentDate %></td>
-                            <td><%= sales[i].branchCode %></td>
-                            <td><%= sales[i].product %></td>
-                            <td><%= sales[i].salesType %></td>
-                            <td><%= sales[i].quantityOfPacks %></td>
-                            <td><%= sales[i].totalPacksAmount %></td>
-                        </tr>
-                        <% } %>
-                    </tbody>
-                  </table>
+            <div class = "container__info-table">
+                <div class="div-table resum-table">
+                   <table>
+                       <thead><tr><th>Secuencia</th></tr></thead>
+                       <tbody><tr><td><%= sales[0]?.sequenceNumber%></td></tr></tbody>
+                       <thead><tr><th>documentDate</th></tr></thead>
+                       <tbody><tr><td><%= sales[0]?.documentDate%></td></tr></tbody>
+                       <thead><tr><th>branchCode</th></tr></thead>
+                       <tbody><tr><td><%= sales[0]?.branchCode%></td></tr></tbody>
+                   </table>
+                </div>
+                <div class="div-table">
+                    <table >
+                        <thead>
+                            <tr >
+                              <th>POSCode</th>
+                              <!-- <th>sequenceNumber</th> -->
+                              <th>documentNumber</th>
+                              <!-- <th>documentDate</th> -->
+                              <!-- <th>branchCode</th> -->
+                              <th>product</th>
+                              <th>salesType</th>
+                              <th>quantityOfPacks</th>
+                              <th>totalPacksAmount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for( let i = 0; i < sales.length; i++ ) { %>
+                            <tr>
+                                <td><%= sales[i].POSCode %></td>
+                                <!-- <td><%= sales[i].sequenceNumber%> </td> -->
+                                <td><%= sales[i].documentNumber %></td>
+                                <!-- <td><%= sales[i].documentDate %></td> -->
+                                <!-- <td><%= sales[i].branchCode %></td> -->
+                                <td><%= sales[i].product %></td>
+                                <td><%= sales[i].salesType %></td>
+                                <td><%= sales[i].quantityOfPacks %></td>
+                                <td><%= sales[i].totalPacksAmount %></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                      </table>
+                </div>
             </div>
+            
         </div>
     </div>
 

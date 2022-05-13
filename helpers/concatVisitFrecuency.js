@@ -15,7 +15,7 @@ export const concatVisitFrecuency = (clients) => {
         delete client.visitFrequency7;
 
         delete client.Informado;
-        delete client.Secuencia;
+        
 
     })
 

@@ -35,25 +35,17 @@ export const getData = async (connection, nameTable, numSec) => {
 
 }
 
-// me devuelve el numSec y el estado (informado) de la db
+// me devuelve el ultimo numero de secuencia y estado (informado) del mismo
 export const getInformado = async (connection) => {
 
-    const query = "  SELECT NumSecuenciaP , Informado FROM parametros ORDER BY NumSecuenciaP DESC LIMIT 1";
+    const query = "  SELECT NumSecuenciaP , Informado, FechaSecuenciaP FROM parametros ORDER BY NumSecuenciaP DESC LIMIT 1";
 
     const [results,] = await connection.execute(query);
 
-    // if (results.length > 0) {
-
-    //     const {NumSecuenciaP, Informado} = results[0];
-    //     return {
-    //         numSecuencia: NumSecuenciaP,
-    //         informado: Informado
-    //     }
-    // }
     return results;
 }
 
-// me devuelve un mensaje de acuerdo a lo que se recibio desde la base de datos
+// me devuelve un mensaje de exito o error de acuerdo a la peticion a la API
 export const getStatusMessage = (resJson) => {
     let message = '';
     let msgType = '';
@@ -113,19 +105,20 @@ export const getStatusMessage = (resJson) => {
     return { message, msgType }
 }
 
-// retorna un arreglo con los objetos que encuentra en la db
-export const getRecordData = async (connection) => {
+// informacion estadistica de las secuencias para el historial
+export const getInfoSequences = async (connection) => {
 
-    const query = 'select NumSecuenciaP, FechaSecuenciaP, Informado from parametros group by NumSecuenciaP';
+                                // Ver y refactorizar
+    const query = 'SELECT * FROM info_secuencia LIMIT 10 ';
     const [record,] = await connection.execute(query);
     
     if(record.length > 0) {
         return record.map(sec => ({
             ...sec,
-            Informado: (sec.Informado == 'N') ? 'NO' : 'SI',
-            FechaSecuenciaP: moment(sec.FechaSecuenciaP).format("L")
+            informado: (sec.informado == 'N') ? 'NO' : 'SI',
+            fecha: moment(sec.fecha).format("L")
         })).sort(function(a, b) {
-            return b.NumSecuenciaP - a.NumSecuenciaP ;
+            return b.num_secuencia - a.num_secuencia ;
           });
     }
 

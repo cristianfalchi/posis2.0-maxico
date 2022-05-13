@@ -80,9 +80,7 @@ hr {
 .icons-menu-logout i {
     text-align: center;
     width: 20px;
-    padding: 5px;
     margin-left: 10px;
-    margin-right: 10px;
 
 }
 
@@ -94,9 +92,8 @@ span:hover {
 .icons-menu i {
     text-align: center;
     width: 20px;
-    padding: 5px;
     margin-left: 10px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 
@@ -129,10 +126,13 @@ a {
 
 
 .container__info {
-
+    background-color: #e1edf2 !important;
     width: 100%;
-    height: 93vh;
+    height: 100vh;
+}
 
+.container__info-table {
+    display: flex;
 }
 
 .container__info div {
@@ -145,12 +145,19 @@ a {
     height: 100vh;
 }
 
+.resum-table {
+    width: 200px !important;
+    padding: 15px;
+    overflow:hidden;
+    
+}
+
 .div-table table {
     border: solid 1px #DDEEEE;
     border-collapse: collapse;
     border-spacing: 0;
     font: normal 10px Arial, sans-serif;
-    margin-top: 60px;
+    margin-top: 70px;
 }
 
 
@@ -162,13 +169,13 @@ a {
     text-align: left;
     text-shadow: 1px 1px 1px #fff;
     position: sticky;
-    top: 40px;
+    top: 70px;
     z-index: 10;
     background-color: #ecdcdc;
 }
 
 .div-table tbody td {
-    border: solid 1px #DDEEEE;
+    border: solid 1px #22f7f7;
     color: #333;
     padding: 10px;
     text-shadow: 1px 1px 1px #fff;
@@ -180,12 +187,14 @@ a {
 }
 
 .title {
+    background-color: #e1edf2 !important;
     position: fixed;
-    padding: 20px 0 5px 15px;
+    padding: 20px 0px 5px 15px;
     top: 0px;
     background: white;
-
+    height: 87px;
 }
+
 
 .message {
     display: flex;

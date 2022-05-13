@@ -10,16 +10,24 @@
         
         <div class="container__info stock animate__animated animate__fadeIn animate__faster">
             <div class = "title">
-                <h2>Stock</h2>
+                <h1>Stock</h1>
+                <!-- <h3>Secuencia N°: <em><%= stock[0]?.sequenceNumber %></em></h3> -->
             <hr/>
             </div>
+            <div class = "container__info-table">
+                <div class="div-table resum-table">
+                   <table>
+                       <thead><tr><th>Secuencia</th></tr></thead>
+                       <tbody><tr><td><%= stock[0]?.sequenceNumber %></td></tr></tbody>
+                       <thead><tr><th>stockDate</th></tr></thead>
+                       <tbody><tr><td><%= stock[0]?.stockDate %></td></tr></tbody>
+                   </table>
+                </div>
             <div class="div-table">
                 <table >
                     <thead>
                         <tr >
-                          <th>sequenceNumber</th>
                           <th>branchCode</th>
-                          <th>stockDate</th>
                           <th>product</th>
                           <th>shipToCode</th>
                           <th>quantityOfPacks</th>
@@ -29,18 +37,16 @@
                     <tbody>
                         <% for( let i = 0; i < stock.length; i++ ) { %>
                         <tr>
-                            <td><%= stock[i].sequenceNumber %> </td>
                             <td><%= stock[i].branchCode %></td>
-                            <td><%= stock[i].stockDate %></td>
                             <td><%= stock[i].product %></td>
                             <td><%= stock[i].shipToCode %></td>
                             <td><%= stock[i].quantityOfPacks %></td>
-                       
                         </tr>
                         <% } %>
                     </tbody>
                   </table>
             </div>
+        </div>
         </div>
     </div>
 
