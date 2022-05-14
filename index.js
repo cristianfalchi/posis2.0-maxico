@@ -3,7 +3,8 @@ const fetch = require('node-fetch');
 const { body, validationResult } = require('express-validator');
 const cors = require('cors')
 import './firebase/config-firebase'
-import { getStatusMessage, getInformado, getData, getInfoSequences } from './database/utils';
+import { getStatusMessage } from './helpers/getStatusMessage'
+import { getInformado, getData, getInfoSequences } from './database/utils';
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { authorization } from './middleware/authorization'
 import moment from 'moment';
@@ -39,7 +40,7 @@ app.listen(app.get('port'), async () => {
     await initialState();
     connection = await connectionDB();
     parametros = await getInformado(connection); // [{...}] o [] numero de secuencia, fecha, informado
-  
+
 })
 
 
@@ -91,14 +92,16 @@ app.get('/send', async (req, res) => {
 
     // Unknown column 'undefined' in 'where clause'
     try {
-        
+
         // en caso que el usuario quiera enviar sin datos
-        if (parametros.length <= 0) {
+        if (parametros[0]?.Informado === 'S') {
             return res.redirect('/');
         }
 
         const customer = await getData(connection, 'customer');
-        delete customer.Secuencia;
+        // elimino el campo Secuencia de los clientes
+        customer.forEach(customer => delete customer.Secuencia);
+        console.log(customer);
         const sales = await getData(connection, 'sales');
         const stock = await getData(connection, 'stock');
 
@@ -120,7 +123,7 @@ app.get('/send', async (req, res) => {
                 'client_secret': '2B16C836D71f43138Fa4CFa30173A18E'
             },
         })
-
+        
         // respuesta del POST
         const resJson = await response.json();
 
@@ -141,7 +144,7 @@ app.get('/send', async (req, res) => {
         res.render('index', { informado: parametros[0]?.Informado, ...message, displayName });
 
     } catch (error) {
-
+        error.message = 'Problema con la comunicación. Vuelva a intentarlo en un momento por favor!'
         res.render('index', { informado: parametros[0]?.Informado, message: error.message, msgType: 'danger', displayName });
     }
 
