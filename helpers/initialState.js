@@ -1,5 +1,6 @@
 import { getInformado } from '../database/utils';
 import { connectionDB } from '../database/conectionDB';
+import moment from 'moment';
 
 export async function initialState() {
     const connection = await connectionDB()

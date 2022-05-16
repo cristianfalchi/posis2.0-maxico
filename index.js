@@ -204,11 +204,11 @@ app.get('/reset', authorization, async (req, res) => {
 
     try {
 
-        await connection.execute("UPDATE customer SET Informado = 'N' WHERE Secuencia = 3276");
-        await connection.execute("UPDATE sales SET informado = 'N' WHERE sequenceNumber = 3276");
-        await connection.execute("UPDATE stock SET informado = 'N' WHERE sequenceNumber = 3276");
-        await connection.execute("UPDATE parametros SET Informado = 'N' WHERE NumSecuenciaP = 3276");
-        await connection.execute("UPDATE info_secuencia SET informado = 'N' WHERE num_secuencia = 3276");
+        await connection.execute("UPDATE customer SET Informado = 'N' WHERE Secuencia = 3277");
+        await connection.execute("UPDATE sales SET informado = 'N' WHERE sequenceNumber = 3277");
+        await connection.execute("UPDATE stock SET informado = 'N' WHERE sequenceNumber = 3277");
+        await connection.execute("UPDATE parametros SET Informado = 'N' WHERE NumSecuenciaP = 3277");
+        await connection.execute("UPDATE info_secuencia SET informado = 'N' WHERE num_secuencia = 3277");
 
         message = getStatusMessage({ statusCode: 200 });
 
