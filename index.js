@@ -56,20 +56,25 @@ app.get('/', authorization, async (req, res) => {
 });
 
 app.get('/clientes', authorization, async (req, res) => {
+    try {
 
-    if (parametros.length > 0 && parametros[0].Informado === 'N') {
-        const customers = await getData(connection, 'customer');
-        return res.render('customers', { customers, informado: parametros[0]?.Informado, displayName });
+        if (parametros.length > 0 && parametros[0].Informado === 'N') {
+            const customers = await getData(connection, 'customer');
+            return res.render('customers', { customers, informado: parametros[0]?.Informado, displayName });
+        }
+
+        return res.render('customers', { customers: [], informado: parametros[0]?.Informado, displayName });
+    } catch (error) {
+        message = 'Error al consultar la Base de Datos. Vuelva a intentarlo en un momento'
+        res.render('index', { informado: parametros[0]?.Informado, message, msgType: 'danger', displayName });
     }
-
-    return res.render('customers', { customers: [], informado: parametros[0]?.Informado, displayName });
 
 });
 
 app.get('/ventas', authorization, async (req, res) => {
 
     if (parametros.length > 0 && parametros[0].Informado === 'N') {
-        const sales = await getData(connection, 'sales');
+        const sales = await getData(connection, 'sales', 15);
         return res.render('sales', { sales, informado: parametros[0]?.Informado, displayName });
     }
 
@@ -101,7 +106,6 @@ app.get('/send', async (req, res) => {
         const customer = await getData(connection, 'customer');
         // elimino el campo Secuencia de los clientes
         customer.forEach(customer => delete customer.Secuencia);
-        console.log(customer);
         const sales = await getData(connection, 'sales');
         const stock = await getData(connection, 'stock');
 
@@ -123,9 +127,17 @@ app.get('/send', async (req, res) => {
                 'client_secret': '2B16C836D71f43138Fa4CFa30173A18E'
             },
         })
-        
+
+        let resJson = null;
+        // verifico que el content-type sea un json
+        var contentType = response.headers.get("content-type");
+        if (!contentType.includes("application/json")) {
+            resJson = { statusCode: 502 }
+        } else {
+            resJson = await response.json();
+        }
+
         // respuesta del POST
-        const resJson = await response.json();
 
         // obetengo el mensaje y el tipo de mensaje de la API
         message = getStatusMessage(resJson);
@@ -144,7 +156,6 @@ app.get('/send', async (req, res) => {
         res.render('index', { informado: parametros[0]?.Informado, ...message, displayName });
 
     } catch (error) {
-        error.message = 'Problema con la comunicación. Vuelva a intentarlo en un momento por favor!'
         res.render('index', { informado: parametros[0]?.Informado, message: error.message, msgType: 'danger', displayName });
     }
 
@@ -184,7 +195,7 @@ app.post(
 
 // muestra el formulario de login
 app.get('/login', (req, res) => {
-    // console.log(req.originalUrl);
+
     // compruebo que no este logueado
     res.render('login');
 })
@@ -200,29 +211,12 @@ app.get('/logout', (req, res) => {
 })
 
 
-app.get('/reset', authorization, async (req, res) => {
+app.get('/actualizar', authorization, async (req, res) => {
 
-    try {
-
-        await connection.execute("UPDATE customer SET Informado = 'N' WHERE Secuencia = 3277");
-        await connection.execute("UPDATE sales SET informado = 'N' WHERE sequenceNumber = 3277");
-        await connection.execute("UPDATE stock SET informado = 'N' WHERE sequenceNumber = 3277");
-        await connection.execute("UPDATE parametros SET Informado = 'N' WHERE NumSecuenciaP = 3277");
-        await connection.execute("UPDATE info_secuencia SET informado = 'N' WHERE num_secuencia = 3277");
-
-        message = getStatusMessage({ statusCode: 200 });
-
-        parametros = await getInformado(connection);
-        return res.render('index', { informado: parametros[0]?.Informado, ...message, displayName });
-
-    } catch (error) {
-        return res.render('index', { informado: parametros[0]?.Informado, message: error.message, msgType: 'danger', displayName });
-    }
-
-    // UPDATE customer SET Informado = 'N' WHERE Secuencia = 3272
-    // UPDATE sales SET informado = 'N' WHERE sequenceNumber = 3272
-    // UPDATE stock SET informado = 'N' WHERE sequenceNumber = 3272
-    // UPDATE parametros SET Informado = 'N' WHERE NumSecuenciaP = 3272
+    await initialState();
+    connection = await connectionDB();
+    parametros = await getInformado(connection);
+    res.redirect('/');
 
 })
 

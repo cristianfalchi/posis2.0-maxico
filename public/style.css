@@ -214,17 +214,20 @@ a {
 
 .color-info {
     background-color: #33b5e5;
-    color: #164d61;
+    /* color: #164d61; */
+    color: #fff;
 }
 
 .color-success {
     background-color: #00C851;
-    color: #005823;
+    /* color: #005823; */
+    color: #fff;
 }
 
 .color-danger {
     background-color: #ff4444;
-    color: rgb(50, 12, 6)
+    /* color: rgb(50, 12, 6) */
+    color: #fff;
 }
 
 .message div {

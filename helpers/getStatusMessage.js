@@ -38,6 +38,10 @@ export const getStatusMessage = (resJson) => {
             // message = "Response code 500 mapped as Internal Server Error."
             message = "Problema interno en el servidor de destino. Inténtelo nuevamente en un momento "
             break;
+        case 502:
+            // message = "Response code 500 mapped as Internal Server Error."
+            message = "El servicio no esta disponible. Inténtelo nuevamente en unos segundos..."
+            break;
         case 503:
             message = "El servicio no esta disponible. Inténtelo nuevamente en unos segundos..."
             // message = "Response code 503 mapped as Service Unavailable."
@@ -61,6 +65,6 @@ export const getStatusMessage = (resJson) => {
 }
 
 
-//invalid json response body at 
-//https://lb-1.eu-west-1.mulesoft-cloudhub-nonprod.pmideep.com/qas-posis-ezd/v2/api/transaction/data 
+//invalid json response body at
+//https://lb-1.eu-west-1.mulesoft-cloudhub-nonprod.pmideep.com/qas-posis-ezd/v2/api/transaction/data
 //reason: Unexpected token < in JSON at position 0
