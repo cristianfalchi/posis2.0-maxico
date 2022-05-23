@@ -7,7 +7,6 @@ import { getStatusMessage } from './helpers/getStatusMessage'
 import { getInformado, getData, getInfoSequences } from './database/utils';
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { authorization } from './middleware/authorization'
-import moment from 'moment';
 import { initialState } from './helpers/initialState';
 import { connectionDB } from './database/conectionDB';
 // creamos un servidor express
@@ -40,7 +39,6 @@ app.listen(app.get('port'), async () => {
     await initialState();
     connection = await connectionDB();
     parametros = await getInformado(connection); // [{...}] o [] numero de secuencia, fecha, informado
-
 })
 
 
@@ -99,6 +97,7 @@ app.get('/send', async (req, res) => {
     try {
 
         // en caso que el usuario quiera enviar sin datos
+        // https://..../send
         if (parametros[0]?.Informado === 'S') {
             return res.redirect('/');
         }
@@ -107,6 +106,12 @@ app.get('/send', async (req, res) => {
         // elimino el campo Secuencia de los clientes
         customer.forEach(customer => delete customer.Secuencia);
         const sales = await getData(connection, 'sales');
+
+        if(sales.length === 0){
+            message = 'No existen ventas para informar. Consulte con el administrador del sistema por favor.';
+            return res.render('index', { informado: parametros[0]?.Informado, message, msgType: 'danger', displayName });
+        }
+
         const stock = await getData(connection, 'stock');
 
         // especificacion de la API
