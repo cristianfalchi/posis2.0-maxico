@@ -1,26 +1,31 @@
 export const concatVisitFrecuency = (clients) => {
 
-    clients.forEach(client => {
-        client.visitFrequency = client.visitFrequency1 + client.visitFrequency2 + client.visitFrequency3 + client.visitFrequency4 + client.visitFrequency5 + client.visitFrequency6 + client.visitFrequency7;
+    return clients.map(client => {
 
-        // ver corregir desde tabla
-        client.streetNumber = Number(client.streetNumber);
+        const {
+            Informado,
+            visitFrequency1,
+            visitFrequency2,
+            visitFrequency3,
+            visitFrequency4,
+            visitFrequency5,
+            visitFrequency6,
+            visitFrequency7,
+            ...resto
 
-        delete client.visitFrequency1;
-        delete client.visitFrequency2;
-        delete client.visitFrequency3;
-        delete client.visitFrequency4;
-        delete client.visitFrequency5;
-        delete client.visitFrequency6;
-        delete client.visitFrequency7;
-
-        delete client.Informado;
+        } = client;
+               
+        const visitas = visitFrequency1 + visitFrequency2 + visitFrequency3 + visitFrequency4 + visitFrequency5 + visitFrequency6 + visitFrequency7;
+        const reg1 = /1/g;
+        const reg2 = /0/g;
+        resto.visitFrequency = visitas.replace(reg1, 'X').replace(reg2, ' ');
         
+        // ver corregir desde tabla
+        resto.streetNumber = Number(resto.streetNumber);
+        
+        return resto;
 
     })
-
-    return clients
-    
 
 }
 
